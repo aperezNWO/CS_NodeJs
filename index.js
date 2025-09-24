@@ -4,6 +4,8 @@
 import SudokuGenerate, { SudokuSolve } from "./modules/sudoku.js";
 import generarinformejson, {
   GenerarInformeCSVJson,
+  GetAllContactForms,
+  config,
 } from "./modules/database.js";
 //
 import express from "express";
@@ -35,17 +37,6 @@ const transporter = nodemailer.createTransport({
     pass: "bzjz fsev xwoh dgkt", // Replace with your Gmail password or app-specific password
   },
 });
-// SQL Server configuration
-const config = {
-  user: "aperezNWO_SQLLogin_1",
-  password: "aperezNWO_SQLLogin_1",
-  server: "webapiangulardemo.mssql.somee.com",
-  database: "webapiangulardemo",
-  options: {
-    encrypt: true,
-    trustServerCertificate: true,
-  },
-};
 //---------------------------------------------------
 // Handling GET requests for different endpoints
 //---------------------------------------------------
@@ -112,7 +103,23 @@ app.get("/tictactoe", (req, res) => {
   //
   console.log(result);
 })();
-
+// getAllContactForms
+(async () => {
+  //
+  const result = await GetAllContactForms();
+  //
+  app.get("/getAllContactForms", (req, res) => {
+    res.set(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate"
+    );
+    res.set("Pragma", "no-cache");
+    res.set("Expires", "0");
+    res.send(result);
+  });
+  //
+  console.log(result);
+})();
 // index
 async function GetIndex() {
   //
@@ -233,6 +240,7 @@ function sendDynamicEmail(to, subject, text, html) {
     }
   });
 }
+
 //---------------------------------------------------
 // DRIVER CODE
 //---------------------------------------------------

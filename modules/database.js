@@ -1,7 +1,7 @@
 //
 import sql from "mssql";
 //
-const config = {
+export const config = {
   user: "aperezNWO_SQLLogin_1",
   password: "aperezNWO_SQLLogin_1",
   server: "webapiangulardemo.mssql.somee.com",
@@ -58,7 +58,46 @@ export async function GenerarInformeCSVJson() {
     const result = await pool
       .request()
       .query(
-        "SELECT id_Column, ciudad, nombreCompleto,profesionOficio FROM PERSONA",
+        "SELECT id_Column, ciudad, nombreCompleto,profesionOficio FROM PERSONA"
+      );
+    //
+    console.log(result);
+    //
+    return result;
+  } catch (err) {
+    //
+    console.error("Error:", err);
+    //
+    if (err.originalError && err.originalError.info) {
+      console.error("Detailed Error Info:", err.originalError.info);
+    }
+    //
+    return JSON.parse("[]");
+    //
+  } finally {
+    //sql.close();
+  }
+}
+
+//
+export async function GetAllContactForms() {
+  //
+  try {
+    /*
+        export interface PersonEntity 
+        {
+            id_Column       : string;
+            ciudad          : string;
+            nombreCompleto  : string;
+            profesionOficio : string;
+        }
+      */
+    //
+    const pool = await sql.connect(config);
+    const result = await pool
+      .request()
+      .query(
+        " SELECT id id  ,Name name ,Email field_1 , Message field_2  , CreatedAt field_3 FROM ContactForm ORDER BY id desc"
       );
     //
     console.log(result);
